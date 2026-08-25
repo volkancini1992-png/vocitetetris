@@ -18,14 +18,15 @@ jobs:
       - name: Extract Arena AI project
         run: |
           rm -rf project
+          mkdir -p project
           unzip -q tetris-oyunum.zip -d project
+          test -f project/package.json
+          test -f project/android/settings.gradle
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
-          cache-dependency-path: project/package-lock.json
 
       - name: Install web dependencies
         working-directory: project
@@ -38,6 +39,7 @@ jobs:
       - name: Put web build into Android assets
         working-directory: project
         run: |
+          test -f dist/index.html
           mkdir -p android/app/src/main/assets
           cp dist/index.html android/app/src/main/assets/index.html
 
